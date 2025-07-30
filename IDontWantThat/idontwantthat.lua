@@ -2,6 +2,17 @@
 local _, ns = ...
 
 local idwt = CreateFrame("Frame", "IDWT", UIParent)
+local FIRST_BAG = BACKPACK_CONTAINER
+local LAST_BAG = (NUM_TOTAL_EQUIPPED_BAG_SLOTS or 5) - 1
+
+local getContainerNumSlots = GetContainerNumSlots
+local getContainerItemLink = GetContainerItemLink
+local pickupContainerItem = PickupContainerItem
+if C_Container then
+    getContainerNumSlots = C_Container.GetContainerNumSlots
+    getContainerItemLink = C_Container.GetContainerItemLink
+    pickupContainerItem = C_Container.PickupContainerItem
+end
 local idwt_timer = {}
 local usingDefaultBags = false
 local markCounter = 1
@@ -73,7 +84,7 @@ end
 
 -- Serves to get the item's itemID + suffixID.
 local function getUniqueItemID(bagNumber, slotNumber)
-    local itemString = GetContainerItemLink(bagNumber, slotNumber)
+    local itemString = getContainerItemLink(bagNumber, slotNumber)
     if not itemString then
         return
     end
@@ -131,7 +142,7 @@ end
 
 -- Also works for Bagnon.
 local function markCombuctorBags()
-    for bagNumber = 0, 4 do
+    for bagNumber = FIRST_BAG, LAST_BAG do
         for slotNumber = 1, 36 do
             local itemButton = _G["ContainerFrame" .. bagNumber + 1 .. "Item" .. slotNumber]
 
@@ -146,8 +157,8 @@ local function markCombuctorBags()
 end
 
 local function markOneBagBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["OneBagFrameBag" .. bagNumber .. "Item" .. bagsSlotCount - slotNumber + 1]
 
@@ -161,8 +172,8 @@ local function markOneBagBags()
 end
 
 local function markBaudBagBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["BaudBagSubBag" .. bagNumber .. "Item" .. slotNumber]
             checkItem(bagNumber, slotNumber, itemButton)
@@ -172,8 +183,8 @@ end
 
 local function markAdiBagBags()
     local totalSlotCount = 0
-    for bagNumber = 0, 4 do
-        totalSlotCount = totalSlotCount + GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        totalSlotCount = totalSlotCount + getContainerNumSlots(bagNumber)
     end
 
     -- For some reason, AdiBags can have way more buttons than the actual amount of bag slots... not sure how or why.
@@ -199,8 +210,8 @@ local function markAdiBagBags()
 end
 
 local function markArkInventoryBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["ARKINV_Frame1ScrollContainerBag" .. bagNumber + 1 .. "Item" .. slotNumber]
             checkItem(bagNumber, slotNumber, itemButton)
@@ -210,8 +221,8 @@ end
 
 local function markCargBagsNivayaBags()
     local totalSlotCount = 0
-    for bagNumber = 0, 4 do
-        totalSlotCount = totalSlotCount + GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        totalSlotCount = totalSlotCount + getContainerNumSlots(bagNumber)
     end
 
     -- Somehow, Nivaya can have higher slot-numbers than actual bag slots exist...
@@ -234,8 +245,8 @@ end
 
 local function markMonoBags()
     local totalSlotCount = 0
-    for bagNumber = 0, 4 do
-        totalSlotCount = totalSlotCount + GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        totalSlotCount = totalSlotCount + getContainerNumSlots(bagNumber)
     end
 
     for slotNumber = 1, totalSlotCount do
@@ -250,8 +261,8 @@ local function markMonoBags()
 end
 
 local function markDerpyBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["StuffingBag" .. bagNumber .. "_" .. slotNumber]
             checkItem(bagNumber, slotNumber, itemButton)
@@ -260,8 +271,8 @@ local function markDerpyBags()
 end
 
 local function markElvUIBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["ElvUI_ContainerFrameBag" .. bagNumber .. "Slot" .. slotNumber]
             checkItem(bagNumber, slotNumber, itemButton)
@@ -270,7 +281,7 @@ local function markElvUIBags()
 end
 
 local function markInventorianBags()
-    for bagNumber = 0, NUM_CONTAINER_FRAMES do
+    for bagNumber = FIRST_BAG, LAST_BAG do
         for slotNumber = 1, 36 do
             local itemButton = _G["ContainerFrame" .. bagNumber + 1 .. "Item" .. slotNumber]
 
@@ -298,8 +309,8 @@ end
 
 -- Special thanks to Tymesink from WowInterface for this one.
 local function markfamBagsBags()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemButton = _G["famBagsButton_" .. bagNumber .. "_" .. slotNumber]
             checkItem(bagNumber, slotNumber, itemButton)
@@ -309,10 +320,10 @@ end
 
 -- Also works for bBag.
 local function markNormalBags()
-    for containerNumber = 0, 4 do
+    for containerNumber = FIRST_BAG, LAST_BAG do
         local container = _G["ContainerFrame" .. containerNumber + 1]
         if (container:IsShown()) then
-            local bagsSlotCount = GetContainerNumSlots(containerNumber)
+            local bagsSlotCount = getContainerNumSlots(containerNumber)
             for slotNumber = 1, bagsSlotCount do
                 -- It appears there are two ways of finding items!
                 --   Accessing via _G means that bagNumbers are 1-based indices and
@@ -394,8 +405,8 @@ end
 --- Checks if there is a unwanted item present
 --  TODO: maybe use a table so it does not have to iterate 2 times over bagslots
 local function isUnwantedItemPresent()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemID, uniqueItemID = getUniqueItemID(bagNumber, slotNumber)
 
@@ -408,8 +419,8 @@ local function isUnwantedItemPresent()
 end
 
 local function deleteUnwantedItems()
-    for bagNumber = 0, 4 do
-        local bagsSlotCount = GetContainerNumSlots(bagNumber)
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
         for slotNumber = 1, bagsSlotCount do
             local itemID, uniqueItemID = getUniqueItemID(bagNumber, slotNumber)
 
@@ -427,7 +438,7 @@ local function deleteUnwantedItems()
                     print("Deleting: "..name)
                 end
 
-                PickupContainerItem(bagNumber, slotNumber)
+                pickupContainerItem(bagNumber, slotNumber)
                 DeleteCursorItem()
 
             end
@@ -592,3 +603,4 @@ addSlashCommand("idwt", function(command)
         print("Command: "..command.." not found.")
     end
 end, "idwt")
+
