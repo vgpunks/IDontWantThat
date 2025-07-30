@@ -8,6 +8,9 @@ local LAST_BAG = (NUM_TOTAL_EQUIPPED_BAG_SLOTS or 5) - 1
 local getContainerNumSlots = GetContainerNumSlots
 local getContainerItemLink = GetContainerItemLink
 local pickupContainerItem = PickupContainerItem
+local IsAddOnLoaded = _G.IsAddOnLoaded or function()
+    return false
+end
 if C_Container then
     getContainerNumSlots = C_Container.GetContainerNumSlots
     getContainerItemLink = C_Container.GetContainerItemLink
