@@ -53,6 +53,7 @@ local function showCoinTexture(itemButton)
     if not itemButton.coins_delete then
         local texture = itemButton:CreateTexture(nil, "OVERLAY")
         texture:SetTexture("Interface\\AddOns\\IDontWantThat\\coins_delete")
+        texture:SetSize(16, 16)
 
         -- Default padding for making bottom-right look great.
         local paddingX, paddingY = -3, 1
