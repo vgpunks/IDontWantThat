@@ -542,7 +542,11 @@ local function handleItemClick(self, button)
     markWares()
 end
 
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", handleItemClick)
+if type(ContainerFrameItemButton_OnModifiedClick) == "function" then
+    hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", handleItemClick)
+elseif ContainerFrameItemButtonMixin and ContainerFrameItemButtonMixin.OnModifiedClick then
+    hooksecurefunc(ContainerFrameItemButtonMixin, "OnModifiedClick", handleItemClick)
+end
 
 -- Add slash commands for options
 local function addSlashCommand(name, func, ...)
