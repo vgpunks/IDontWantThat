@@ -321,6 +321,23 @@ local function markfamBagsBags()
     end
 end
 
+-- Basic DJBags support
+local function markDJBagsBags()
+    for bagNumber = FIRST_BAG, LAST_BAG do
+        local bagsSlotCount = getContainerNumSlots(bagNumber)
+        for slotNumber = 1, bagsSlotCount do
+            local itemButton = _G["DJBagsItem" .. bagNumber .. "_" .. slotNumber]
+            if not itemButton then
+                itemButton = _G["DJBagsSlot" .. bagNumber .. "_" .. slotNumber]
+            end
+
+            if itemButton then
+                checkItem(bagNumber, slotNumber, itemButton)
+            end
+        end
+    end
+end
+
 -- Also works for bBag.
 local function markNormalBags()
     for containerNumber = FIRST_BAG, LAST_BAG do
@@ -373,6 +390,8 @@ local function markWares()
         markInventorianBags()
     elseif IsAddOnLoaded("LiteBag") then
         markLiteBagBags()
+    elseif IsAddOnLoaded("DJBags") then
+        markDJBagsBags()
     else
         usingDefaultBags = true
         markNormalBags()
@@ -550,6 +569,7 @@ if type(ContainerFrameItemButton_OnModifiedClick) == "function" then
 elseif ContainerFrameItemButtonMixin and ContainerFrameItemButtonMixin.OnModifiedClick then
     hooksecurefunc(ContainerFrameItemButtonMixin, "OnModifiedClick", handleItemClick)
 end
+
 
 -- Add slash commands for options
 local function addSlashCommand(name, func, ...)
